@@ -8,6 +8,6 @@ public class DarkSkinDecorator extends UIDecorator {
     @Override
     public void render() {
         super.render();
-        System.out.print(" with dark skin");
+        System.out.print(" с темной темой");
     }
 }

@@ -18,7 +18,7 @@ public class DefaultAchievementManager implements AchievementManager {
     @Override
     public void addAchievement(Game game, Achievement achievement) {
         gameAchievements.computeIfAbsent(game, k -> new ArrayList<>()).add(achievement);
-        System.out.println("Added achievement '" + achievement.getName() + "' to game: " + game.getTitle());
+        System.out.println("Добавлено достижение '" + achievement.getName() + "' для игры: " + game.getTitle());
     }
 
     @Override
@@ -30,20 +30,20 @@ public class DefaultAchievementManager implements AchievementManager {
                 return;
             }
         }
-        System.out.println("Achievement '" + achievementName + "' not found for game: " + game.getTitle());
+        System.out.println("Достижение '" + achievementName + "' Не найдено для игры: " + game.getTitle());
     }
 
     @Override
     public void viewAchievements(Game game) {
         List<Achievement> achievements = gameAchievements.getOrDefault(game, new ArrayList<>());
         if (achievements.isEmpty()) {
-            System.out.println("No achievements for game: " + game.getTitle());
+            System.out.println("Нет достижений для игры: " + game.getTitle());
             return;
         }
-        System.out.println("Achievements for " + game.getTitle() + ":");
+        System.out.println("Достижения для игры " + game.getTitle() + ":");
         for (Achievement achievement : achievements) {
             System.out.println("- " + achievement.getName() + ": " + achievement.getDescription() +
-                    " (" + (achievement.isUnlocked() ? "Unlocked" : "Locked") + ")");
+                    " (" + (achievement.isUnlocked() ? "Разблокировано" : "Заблокировано") + ")");
         }
     }
 

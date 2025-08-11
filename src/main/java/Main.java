@@ -11,6 +11,8 @@ import steam.ui.CustomSkinDecorator;
 import steam.ui.DarkSkinDecorator;
 import steam.ui.UIComponent;
 import steam.chat.Friend;
+import steam.games.Achievement;
+import steam.games.achievements.UnlockAchievementCommand;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,7 +27,7 @@ public class Main {
                 .build();
         client.setProfile(profile);
 
-        // Factory: Создаём игры (добавим больше для демонстрации анализа)
+        // Factory: Создаём игры
         GameFactory actionFactory = new ActionGameFactory();
         Game game1 = actionFactory.createGame("Doom", 59.99);
         client.addGameToLibrary(game1);
@@ -49,6 +51,35 @@ public class Main {
         Game game6 = strategyFactory.createGame("Age of Empires", 19.99);
         client.addGameToLibrary(game6);
 
+        // Добавление достижений
+        client.getAchievementManager().addAchievement(game1, new Achievement("Demon Slayer", "Победить 100 демонов"));
+        client.getAchievementManager().addAchievement(game1, new Achievement("Hell Walker", "Завершить кампанию"));
+        client.getAchievementManager().addAchievement(game1, new Achievement("Speedrunner", "Пройти уровень за 5 минут"));
+        client.getAchievementManager().addAchievement(game2, new Achievement("World Conqueror", "Победить на всех картах"));
+        client.getAchievementManager().addAchievement(game2, new Achievement("Master Builder", "Построить 100 зданий"));
+        client.getAchievementManager().addAchievement(game3, new Achievement("Crowbar Master", "Уничтожить 50 врагов ломом"));
+
+        // Command: Разблокировка нескольких достижений
+        UnlockAchievementCommand unlockCommand1 = new UnlockAchievementCommand(client.getAchievementManager(), game1, "Demon Slayer");
+        unlockCommand1.execute();
+        UnlockAchievementCommand unlockCommand2 = new UnlockAchievementCommand(client.getAchievementManager(), game1, "Hell Walker");
+        unlockCommand2.execute();
+        UnlockAchievementCommand unlockCommand3 = new UnlockAchievementCommand(client.getAchievementManager(), game2, "World Conqueror");
+        unlockCommand3.execute();
+        unlockCommand1.execute();
+
+        // Просмотр достижений для нескольких игр
+        System.out.println("Просмотр достижений:");
+        client.getAchievementManager().viewAchievements(game1);
+        client.getAchievementManager().viewAchievements(game2);
+        client.getAchievementManager().viewAchievements(game3);
+
+        // Вывод количества достижений для каждой игры
+        System.out.println("Количество достижений по играм:");
+        System.out.println("- Doom: " + client.getAchievementManager().getAchievementCount(game1) + " достижений");
+        System.out.println("- Civilization: " + client.getAchievementManager().getAchievementCount(game2) + " достижений");
+        System.out.println("- Half-Life: " + client.getAchievementManager().getAchievementCount(game3) + " достижений");
+
         // Strategy: Просмотр библиотеки с сортировкой
         SortStrategy sortByTitle = new SortByTitle();
         client.viewLibrary(sortByTitle);
@@ -68,7 +99,6 @@ public class Main {
         Friend friend2 = new Friend("FriendB");
         client.getFriendChat().addObserver(friend1);
         client.getFriendChat().addObserver(friend2);
-        client.sendMessageToFriend("FriendA", "Hello!");
-
+        client.sendMessageToFriend("FriendA", "Привет!");
     }
 }

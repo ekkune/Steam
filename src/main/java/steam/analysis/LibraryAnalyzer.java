@@ -17,11 +17,10 @@ public class LibraryAnalyzer implements Analyzer {
     @Override
     public void analyze() {
         if (library.isEmpty()) {
-            System.out.println("Library is empty. No analysis available.");
+            System.out.println("Библиотека пуста. Анализ невозможен.");
             return;
         }
 
-        // Расчёт базовой статистики
         int totalGames = library.size();
         double totalPrice = library.stream().mapToDouble(Game::getPrice).sum();
         double averagePrice = totalPrice / totalGames;
@@ -30,35 +29,31 @@ public class LibraryAnalyzer implements Analyzer {
         Map<String, Long> typeCount = library.stream()
                 .collect(Collectors.groupingBy(Game::getType, Collectors.counting()));
 
-        // Более сложный анализ: Стандартное отклонение цен
         double mean = averagePrice;
         double variance = library.stream()
                 .mapToDouble(game -> Math.pow(game.getPrice() - mean, 2))
                 .sum() / totalGames;
         double stdDev = Math.sqrt(variance);
 
-        // Распределение по ценовым категориям
         Map<String, Long> priceDistribution = new HashMap<>();
         priceDistribution.put("<20", library.stream().filter(g -> g.getPrice() < 20).count());
         priceDistribution.put("20-50", library.stream().filter(g -> g.getPrice() >= 20 && g.getPrice() < 50).count());
         priceDistribution.put("50-100", library.stream().filter(g -> g.getPrice() >= 50 && g.getPrice() < 100).count());
         priceDistribution.put(">100", library.stream().filter(g -> g.getPrice() >= 100).count());
 
-        // Вывод статистики
-        System.out.println("Advanced Library Analysis:");
-        System.out.println("- Total games: " + totalGames);
-        System.out.println("- Total spent: $" + String.format("%.2f", totalPrice));
-        System.out.println("- Average price: $" + String.format("%.2f", averagePrice));
-        System.out.println("- Max price: $" + String.format("%.2f", maxPrice));
-        System.out.println("- Min price: $" + String.format("%.2f", minPrice));
-        System.out.println("- Standard deviation of prices: " + String.format("%.2f", stdDev));
-        System.out.println("- Games by type:");
+        System.out.println("Анализ библиотеки:");
+        System.out.println("- Количество игр: " + totalGames);
+        System.out.println("- Суммарная стоимость: $" + String.format("%.2f", totalPrice));
+        System.out.println("- Средняя цена: $" + String.format("%.2f", averagePrice));
+        System.out.println("- Максимальная цена: $" + String.format("%.2f", maxPrice));
+        System.out.println("- Минимальная цена: $" + String.format("%.2f", minPrice));
+        System.out.println("- Стандартное отклонение цен: " + String.format("%.2f", stdDev));
+        System.out.println("- Распределение по жанрам:");
         typeCount.forEach((type, count) -> System.out.println("  - " + type + ": " + count));
-        System.out.println("- Price distribution:");
+        System.out.println("- Распределение по ценовым категориям:");
         priceDistribution.forEach((range, count) -> System.out.println("  - " + range + ": " + count));
 
-        // Простой ASCII-график для распределения по типам
-        System.out.println("- Type distribution bar chart:");
+        System.out.println("- Гистограмма распределения по жанрам:");
         long maxCount = typeCount.values().stream().max(Long::compare).orElse(1L);
         typeCount.forEach((type, count) -> {
             System.out.print(type + ": ");

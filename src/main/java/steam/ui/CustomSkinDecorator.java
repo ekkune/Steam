@@ -8,6 +8,6 @@ public class CustomSkinDecorator extends UIDecorator {
     @Override
     public void render() {
         super.render();
-        System.out.print(" with custom accents");
+        System.out.print(" Кастомный");
     }
 }

@@ -21,7 +21,7 @@ public class FriendChat {
     }
 
     public void receiveMessage(String friendName, String message) {
-        System.out.println("Message from " + friendName + ": " + message);
+        System.out.println("Сообщение от " + friendName + ": " + message);
         notifyObservers(message);
     }
 }
